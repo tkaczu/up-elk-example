@@ -1,0 +1,19 @@
+symfony_app:
+  build: .
+  container_name: uszanowanko_elk_symfony_app
+  command: bash -c "php app/console server:run 0.0.0.0:8000"
+  ports:
+    - "3000:8000"
+  volumes:
+    - .:/app
+
+elk:
+  image: willdurand/elk
+  container_name: uszanowanko_elk_stack
+  ports:
+    - "8010:80"
+  volumes:
+    - ./elk/logstash:/etc/logstash
+    - ./elk/logstash/patterns:/opt/logstash/patterns
+  volumes_from:
+    - symfony_app
